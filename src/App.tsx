@@ -1,9 +1,12 @@
-import { useState } from 'react';
-
-import Quiz from './components/widgets/Quiz';
+import Container from '@/components/ui/Container';
+import QuizList from '@/components/widgets/QuizList';
 
 const App = () => {
-  return <Quiz />;
+  return (
+    <Container className="flex min-h-screen py-10">
+      <QuizList />
+    </Container>
+  );
 };
 
 export default App;

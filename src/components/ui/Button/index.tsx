@@ -4,7 +4,7 @@ type VariantTypes = 'clear' | 'green';
 
 const variantClasses: Record<VariantTypes, string> = {
   clear: '',
-  green: 'rounded-md bg-green-700 w-24 h-10',
+  green: 'rounded-md bg-green-700 w-24 h-10 hover:bg-green-600 duration-100',
 };
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 
-import Container from '@/components//ui/Container';
 import Button from '@/components/ui/Button';
-import { IListQuiz, IQuiz } from '@/types';
+import Container from '@/components/ui/Container';
+import { IListQuiz } from '@/types';
 
 interface Props {
   quiz: IListQuiz;
@@ -12,10 +12,10 @@ interface Props {
 const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showScore, setShowScore] = useState(false);
 
-  const handleAnswerChange = (answerId: number) => {
+  const handleAnswerChange = (answerId: string) => {
     setSelectedAnswer(answerId);
   };
 
@@ -74,7 +74,11 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
           <p className="text-xl">{quiz.questions[currentQuestion]?.title}</p>
           <form className="flex flex-col gap-2 mt-2">
             {quiz.questions[currentQuestion]?.answers.map((answer) => (
-              <label className="flex gap-3 bg-gray-800 px-4 py-2 rounded-md">
+              <label
+                key={answer.id}
+                className="flex gap-3 bg-gray-800 px-4 py-2 rounded-md"
+                htmlFor={`quiz-answer-${answer.id}`}
+              >
                 <input
                   type="radio"
                   name="quiz-answer"

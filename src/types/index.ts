@@ -1,11 +1,13 @@
+export interface Answer {
+  id: string;
+  answer: string;
+  isCorrect: boolean;
+}
+
 export interface IQuiz {
   id: string;
   title: string;
-  answers: {
-    id: number;
-    answer: string;
-    isCorrect: boolean;
-  }[];
+  answers: Answer[];
 }
 
 export interface IListQuiz {

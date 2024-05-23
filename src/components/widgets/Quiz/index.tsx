@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
@@ -10,11 +10,34 @@ interface Props {
   closeQuiz: () => void;
 }
 
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+  return `${formattedMinutes}:${formattedSeconds}`;
+};
+
 const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showScore, setShowScore] = useState(false);
+  const [currentTime, setCurrentTime] = useState(3590);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setCurrentTime((prev) => prev + 1), 1000);
+
+    if (currentTime >= 3600 || showScore) {
+      setShowScore(true);
+      clearTimeout(timeout);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [currentTime, showScore]);
 
   const handleAnswerChange = (answerId: string) => {
     setSelectedAnswer(answerId);
@@ -42,6 +65,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
     setShowScore(false);
     setCurrentQuestion(0);
     setScore(0);
+    setCurrentTime(0);
     closeQuiz();
   };
 
@@ -53,6 +77,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
           <p className="text-3xl">
             {score} out of {quiz.questions.length}
           </p>
+          <p>Your time is {formatTime(currentTime)}</p>
           <Button variant="green" onClick={resetQuiz}>
             Reset
           </Button>
@@ -90,9 +115,13 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
             ))}
           </form>
         </div>
-        <Button onClick={handleNextQuestion} variant="green">
-          Next
-        </Button>
+        <div className="flex justify-between items-center">
+          <Button onClick={handleNextQuestion} variant="green">
+            Next
+          </Button>
+
+          <p>{formatTime(currentTime)}</p>
+        </div>
       </div>
     </Container>
   );

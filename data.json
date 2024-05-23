@@ -1,0 +1,109 @@
+{
+  "quizs": [
+    {
+      "id": "1",
+      "title": "Math Quiz",
+      "answers": [
+        {
+          "id": 1,
+          "answer": "2 + 2 = 4",
+          "isCorrect": true
+        },
+        {
+          "id": 2,
+          "answer": "2 + 2 = 3",
+          "isCorrect": false
+        },
+        {
+          "id": 3,
+          "answer": "2 + 2 = 5",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Science Quiz",
+      "answers": [
+        {
+          "id": 1,
+          "answer": "The Earth is flat",
+          "isCorrect": false
+        },
+        {
+          "id": 2,
+          "answer": "The Earth revolves around the Sun",
+          "isCorrect": true
+        },
+        {
+          "id": 3,
+          "answer": "The Sun revolves around the Earth",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "History Quiz",
+      "answers": [
+        {
+          "id": 1,
+          "answer": "World War II ended in 1945",
+          "isCorrect": true
+        },
+        {
+          "id": 2,
+          "answer": "World War II ended in 1939",
+          "isCorrect": false
+        },
+        {
+          "id": 3,
+          "answer": "World War II ended in 1950",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Geography Quiz",
+      "answers": [
+        {
+          "id": 1,
+          "answer": "The capital of France is Paris",
+          "isCorrect": true
+        },
+        {
+          "id": 2,
+          "answer": "The capital of France is Berlin",
+          "isCorrect": false
+        },
+        {
+          "id": 3,
+          "answer": "The capital of France is Madrid",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Literature Quiz",
+      "answers": [
+        {
+          "id": 1,
+          "answer": "Shakespeare wrote 'Hamlet'",
+          "isCorrect": true
+        },
+        {
+          "id": 2,
+          "answer": "Shakespeare wrote 'War and Peace'",
+          "isCorrect": false
+        },
+        {
+          "id": 3,
+          "answer": "Shakespeare wrote 'Pride and Prejudice'",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import close from '@/assets/close.svg?react';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
-import Label from '@/components/ui/Label';
+import Input from '@/components/ui/Input';
+import Radio from '@/components/ui/Radio';
 import { Answer } from '@/types';
 
 type Props = {
@@ -41,29 +42,32 @@ const QuestionAnswerForm: FC<Props> = ({ index }) => {
     <div className="flex items-center flex-col gap-5 w-full">
       <h5 className="text-2xl w-full font-bold text-white">{index + 1}. Question</h5>
       <div className="w-full">
-        <Label htmlFor={`quizList.${index}.title`} labelText="Question">
-          <input
+        <label htmlFor={`quizList.${index}.title`}>
+          Question
+          <Input
+            variant="primary"
             className="bg-gray-600 px-2 py-2 outline-none rounded-md w-full"
             {...register(`quizList.${index}.title`, {
               required: { value: true, message: 'Question is required' },
               minLength: { value: 1, message: 'Min length is 1 letter' },
             })}
           />
-        </Label>
+        </label>
       </div>
       {fields.map((field, otherAnswerIndex) => (
         <div key={field.id} className="flex gap-2 items-center w-full">
-          <input
-            type="radio"
-            value={otherAnswerIndex}
-            checked={selectedCorrectAnswer === otherAnswerIndex}
-            onChange={() => handleCorrectAnswerChange(otherAnswerIndex)}
-            className="mr-2 w-5"
-          />
+          <div>
+            <Radio
+              value={otherAnswerIndex}
+              checked={selectedCorrectAnswer === otherAnswerIndex}
+              onChange={() => handleCorrectAnswerChange(otherAnswerIndex)}
+            />
+          </div>
           <div className="w-full">
             <label htmlFor={`quizList.${index}.answers.${otherAnswerIndex}.answer`}>
-              <input
-                className={`bg-gray-600 w-full px-2 py-1 outline-none rounded-md ${
+              <Input
+                variant="primary"
+                className={`${
                   selectedCorrectAnswer === otherAnswerIndex &&
                   '!border-[3px] border-green-300'
                 }`}
@@ -74,14 +78,9 @@ const QuestionAnswerForm: FC<Props> = ({ index }) => {
               />
             </label>
           </div>
-          <Icon
-            height={18}
-            width={18}
-            clickable
-            onClick={() => remove(otherAnswerIndex)}
-            Svg={close}
-            className="!stroke-white"
-          />
+          <Button onClick={() => remove(otherAnswerIndex)} variant="clear">
+            <Icon height={18} width={18} Svg={close} className="!stroke-white" />
+          </Button>
         </div>
       ))}
       <Button variant="green" className="w-full" onClick={appendIncorrectAnswer}>

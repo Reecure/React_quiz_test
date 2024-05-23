@@ -16,6 +16,7 @@ export type FormData = {
 const App = () => {
   const [quizListInit, setQuizListInit] = useState<IListQuiz[]>();
   const [quizForEditing, setQuizForEditing] = useState<IListQuiz | null>(null);
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [formIsOpen, setIsFormOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -41,8 +42,10 @@ const App = () => {
   const deleteQuizHandler = (id: string) => {
     const updatedList = quizListInit?.filter((item) => item.id !== id);
 
-    setQuizListInit(updatedList);
-    localStorage.setItem('reactQuizStorage', JSON.stringify(updatedList));
+    if (updatedList) {
+      setQuizListInit(updatedList);
+      localStorage.setItem('reactQuizStorage', JSON.stringify(updatedList));
+    }
   };
 
   if (formIsOpen && quizListInit) {
@@ -58,31 +61,37 @@ const App = () => {
 
   return (
     <Container className="flex flex-col items-start w-full min-h-screen py-10">
-      <div className="flex justify-between w-full items-center gap-5 mb-10">
-        {!formIsOpen && (
-          <p className="text-4xl font-semibold">
-            Quiz&apos;s{' '}
-            <span className="p-1 px-3 bg-gray-700 rounded-md text-lg">
-              {quizListInit?.length || 0}
-            </span>{' '}
-          </p>
-        )}
+      {!isQuizStarted && (
+        <section className="flex justify-between w-full items-center gap-5 mb-10">
+          {!formIsOpen && (
+            <p className="text-4xl font-semibold">
+              Quiz&apos;s{' '}
+              <span className="p-1 px-3 bg-gray-700 rounded-md text-lg">
+                {quizListInit?.length || 0}
+              </span>{' '}
+            </p>
+          )}
 
-        <Button
-          variant="green"
-          onClick={() => {
-            setIsFormOpen(true);
-            setQuizForEditing(null);
-          }}
-        >
-          Add
-        </Button>
-      </div>
+          <Button
+            variant="green"
+            onClick={() => {
+              setIsFormOpen(true);
+              setQuizForEditing(null);
+            }}
+          >
+            Add
+          </Button>
+        </section>
+      )}
       {quizListInit && (
         <QuizList
           setIdForEditing={editQuizHandler}
           quizs={quizListInit}
           deleteQuiz={deleteQuizHandler}
+          setIsQuizStarted={() => setIsQuizStarted(true)}
+          resetQuiz={() => {
+            setIsQuizStarted(false);
+          }}
         />
       )}
     </Container>

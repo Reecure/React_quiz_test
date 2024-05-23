@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
@@ -7,7 +7,7 @@ import close from '@/assets/close.svg?react';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import Icon from '@/components/ui/Icon';
-import Label from '@/components/ui/Label';
+import Input from '@/components/ui/Input';
 import QuestionAnswerForm from '@/components/ui/QuestionAnswerForm';
 import { IListQuiz } from '@/types';
 
@@ -24,13 +24,15 @@ const QuizForm: FC<Props> = ({
   updateStorage,
   initialValues,
 }) => {
+  const [formError, setFormError] = useState<string | null>(null);
+
   const methods = useForm<FormData>({
     defaultValues: initialValues
       ? { title: initialValues.title, quizList: initialValues.questions }
       : { quizList: [], title: '' },
   });
 
-  const { handleSubmit, register } = methods;
+  const { handleSubmit, register, setError } = methods;
 
   const { append, fields, remove } = useFieldArray({
     control: methods.control,
@@ -46,17 +48,37 @@ const QuizForm: FC<Props> = ({
   };
 
   const renderCloseButton = (index: number) => (
-    <Icon
-      height={20}
-      width={20}
-      clickable
-      onClick={() => remove(index)}
-      Svg={close}
-      className="!stroke-white absolute right-5 top-5"
-    />
+    <Button onClick={() => remove(index)} variant="clear">
+      <Icon
+        height={20}
+        width={20}
+        Svg={close}
+        className="!stroke-white absolute right-5 top-5"
+      />
+    </Button>
   );
 
   const onSubmit = (data: FormData) => {
+    let hasError = false;
+
+    data.quizList.forEach((question, index) => {
+      const hasCorrectAnswer = question.answers.some((answer) => answer.isCorrect);
+
+      if (!hasCorrectAnswer) {
+        hasError = true;
+        setError(`quizList.${index}.title`, {
+          type: 'manual',
+          message: 'Each question must have a correct answer.',
+        });
+      }
+    });
+
+    if (hasError) {
+      setFormError('Please ensure every question has a correct answer.');
+
+      return;
+    }
+
     let updatedQuizList: IListQuiz[];
 
     if (initialValues) {
@@ -92,15 +114,17 @@ const QuizForm: FC<Props> = ({
           className="flex flex-col gap-5  items-center w-full"
         >
           <div className="w-full">
-            <Label htmlFor="title" labelText="Quiz Title">
-              <input
+            <label htmlFor="title">
+              Quiz Title
+              <Input
+                variant="primary"
                 className="bg-gray-600 px-2 py-2 outline-none rounded-md w-full"
                 {...register(`title`, {
                   required: { value: true, message: 'Question is required' },
                   minLength: { value: 1, message: 'Min length is 1 letter' },
                 })}
               />
-            </Label>
+            </label>
           </div>
 
           {fields.map((_, index) => (
@@ -110,7 +134,7 @@ const QuizForm: FC<Props> = ({
               {renderCloseButton(index)}
             </div>
           ))}
-
+          {formError && <div className="text-red-500">{formError}</div>}
           <div className="flex justify-between w-full gap-5 mt-5">
             <Button variant="green" className="w-full" onClick={addQuestionAnswerBlock}>
               Add question

@@ -120,6 +120,7 @@
     "default-param-last": "off",
     "react/display-name": "off",
     "react/react-in-jsx-scope": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "react/require-default-props": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",

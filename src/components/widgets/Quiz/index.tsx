@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import Radio from '@/components/ui/Radio';
 import { IListQuiz } from '@/types';
 
 interface Props {
@@ -47,7 +48,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
   if (showScore) {
     return (
       <Container className="flex justify-center items-center min-h-screen">
-        <div className="flex flex-col items-center gap-5 max-w-[450px] w-full text-center">
+        <div className="flex flex-col items-center gap-5 max-w-[750px] w-full text-center">
           <h1 className="text-5xl font-semibold">Your Score</h1>
           <p className="text-3xl">
             {score} out of {quiz.questions.length}
@@ -62,7 +63,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
 
   return (
     <Container className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col gap-5 max-w-[450px] w-full">
+      <div className="flex flex-col gap-5 w-[450px] sm:w-[550px]">
         <h1 className="text-5xl font-semibold">{quiz.title}</h1>
         <div>
           <h2 className="text-2xl">
@@ -74,20 +75,18 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
           <p className="text-xl">{quiz.questions[currentQuestion]?.title}</p>
           <form className="flex flex-col gap-2 mt-2">
             {quiz.questions[currentQuestion]?.answers.map((answer) => (
-              <label
+              <div
                 key={answer.id}
-                className="flex gap-3 bg-gray-800 px-4 py-2 rounded-md"
-                htmlFor={`quiz-answer-${answer.id}`}
+                className="flex items-center gap-3 bg-gray-800 rounded-md px-3 py-2"
               >
-                <input
-                  type="radio"
-                  name="quiz-answer"
-                  value={answer.id}
+                <Radio
                   checked={selectedAnswer === answer.id}
+                  value={answer.id}
+                  htmlFor={`quiz-answer-${answer.id}`}
                   onChange={() => handleAnswerChange(answer.id)}
                 />
-                {answer.answer}
-              </label>
+                <p>{answer.answer}</p>
+              </div>
             ))}
           </form>
         </div>

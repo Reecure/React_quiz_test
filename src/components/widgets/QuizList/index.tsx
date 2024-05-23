@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 
 import trashbin from '@/assets/delete.svg?react';
+import edit from '@/assets/edit.svg?react';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
 import Quiz from '@/components/widgets/Quiz';
@@ -9,9 +10,10 @@ import { IListQuiz } from '@/types';
 interface Props {
   quizs: IListQuiz[];
   deleteQuiz: (idx: string) => void;
+  setIdForEditing: (idx: string) => void;
 }
 
-const QuizList: FC<Props> = ({ quizs, deleteQuiz }) => {
+const QuizList: FC<Props> = ({ quizs, deleteQuiz, setIdForEditing }) => {
   const [currentQuiz, setCurrentQuiz] = useState<null | number>(null);
 
   if (currentQuiz !== null) {
@@ -34,12 +36,18 @@ const QuizList: FC<Props> = ({ quizs, deleteQuiz }) => {
             <Button variant="clear" onClick={() => setCurrentQuiz(i)} className="">
               {quiz?.title}
             </Button>
-            <div>
+            <div className="flex gap-2">
+              <Icon
+                Svg={edit}
+                clickable
+                onClick={() => setIdForEditing(quiz.id)}
+                className="!stroke-blue-500 hover:!stroke-blue-400 duration-100"
+              />
               <Icon
                 Svg={trashbin}
                 clickable
                 onClick={() => deleteQuiz(quiz.id)}
-                className="!stroke-red-500"
+                className="!stroke-red-500 hover:!stroke-red-400 duration-100"
               />
             </div>
           </div>

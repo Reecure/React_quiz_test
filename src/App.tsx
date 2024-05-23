@@ -9,12 +9,13 @@ import QuizList from '@/components/widgets/QuizList';
 import { IListQuiz, IQuiz } from '@/types';
 
 export type FormData = {
-  quizTitle: string;
+  title: string;
   quizList: IQuiz[];
 };
 
 const App = () => {
   const [quizListInit, setQuizListInit] = useState<IListQuiz[]>();
+  const [quizForEditing, setQuizForEditing] = useState<IListQuiz | null>(null);
   const [formIsOpen, setIsFormOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -28,6 +29,15 @@ const App = () => {
     }
   }, []);
 
+  const editQuizHandler = (idx: string) => {
+    const quizForEditing = quizListInit?.find((quiz) => quiz.id === idx);
+
+    if (quizForEditing) {
+      setQuizForEditing(quizForEditing);
+      setIsFormOpen(true);
+    }
+  };
+
   const deleteQuizHandler = (id: string) => {
     const updatedList = quizListInit?.filter((item) => item.id !== id);
 
@@ -40,6 +50,7 @@ const App = () => {
       <QuizForm
         initedListQuiz={quizListInit}
         closeForm={() => setIsFormOpen(false)}
+        initialValues={quizForEditing !== null ? quizForEditing : null}
         updateStorage={(quizList: IListQuiz[]) => setQuizListInit(quizList)}
       />
     );
@@ -57,11 +68,23 @@ const App = () => {
           </p>
         )}
 
-        <Button variant="green" onClick={() => setIsFormOpen(true)}>
+        <Button
+          variant="green"
+          onClick={() => {
+            setIsFormOpen(true);
+            setQuizForEditing(null);
+          }}
+        >
           Add
         </Button>
       </div>
-      {quizListInit && <QuizList quizs={quizListInit} deleteQuiz={deleteQuizHandler} />}
+      {quizListInit && (
+        <QuizList
+          setIdForEditing={editQuizHandler}
+          quizs={quizListInit}
+          deleteQuiz={deleteQuizHandler}
+        />
+      )}
     </Container>
   );
 };

@@ -78,7 +78,7 @@ const QuestionAnswerForm: FC<Props> = ({ index }) => {
             height={18}
             width={18}
             clickable
-            onClick={() => remove(index)}
+            onClick={() => remove(otherAnswerIndex)}
             Svg={close}
             className="!stroke-white"
           />

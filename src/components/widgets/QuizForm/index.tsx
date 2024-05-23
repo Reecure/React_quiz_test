@@ -13,13 +13,21 @@ import { IListQuiz } from '@/types';
 
 interface Props {
   initedListQuiz: IListQuiz[];
+  initialValues?: IListQuiz | null;
   closeForm: () => void;
   updateStorage: (list: IListQuiz[]) => void;
 }
 
-const QuizForm: FC<Props> = ({ initedListQuiz, closeForm, updateStorage }) => {
+const QuizForm: FC<Props> = ({
+  initedListQuiz,
+  closeForm,
+  updateStorage,
+  initialValues,
+}) => {
   const methods = useForm<FormData>({
-    defaultValues: { quizList: [] },
+    defaultValues: initialValues
+      ? { title: initialValues.title, quizList: initialValues.questions }
+      : { quizList: [], title: '' },
   });
 
   const { handleSubmit, register } = methods;
@@ -31,7 +39,7 @@ const QuizForm: FC<Props> = ({ initedListQuiz, closeForm, updateStorage }) => {
 
   const addQuestionAnswerBlock = () => {
     append({
-      id: new Date().toString(),
+      id: crypto.randomUUID(),
       title: '',
       answers: [{ id: crypto.randomUUID(), answer: '', isCorrect: false }],
     });
@@ -49,13 +57,23 @@ const QuizForm: FC<Props> = ({ initedListQuiz, closeForm, updateStorage }) => {
   );
 
   const onSubmit = (data: FormData) => {
-    const listQuiz: IListQuiz = {
-      id: crypto.randomUUID(),
-      title: data.quizTitle,
-      questions: data.quizList,
-    };
+    let updatedQuizList: IListQuiz[];
 
-    const updatedQuizList = [...(initedListQuiz || []), listQuiz];
+    if (initialValues) {
+      updatedQuizList = initedListQuiz.map((quiz) =>
+        quiz.id === initialValues.id
+          ? { ...quiz, title: data.title, questions: data.quizList }
+          : quiz,
+      );
+    } else {
+      const newQuiz: IListQuiz = {
+        id: crypto.randomUUID(),
+        title: data.title,
+        questions: data.quizList,
+      };
+
+      updatedQuizList = [...(initedListQuiz || []), newQuiz];
+    }
 
     localStorage.setItem('reactQuizStorage', JSON.stringify(updatedQuizList));
     updateStorage(updatedQuizList);
@@ -74,10 +92,10 @@ const QuizForm: FC<Props> = ({ initedListQuiz, closeForm, updateStorage }) => {
           className="flex flex-col gap-5  items-center w-full"
         >
           <div className="w-full">
-            <Label htmlFor="quizTitle" labelText="Quiz Title">
+            <Label htmlFor="title" labelText="Quiz Title">
               <input
                 className="bg-gray-600 px-2 py-2 outline-none rounded-md w-full"
-                {...register(`quizTitle`, {
+                {...register(`title`, {
                   required: { value: true, message: 'Question is required' },
                   minLength: { value: 1, message: 'Min length is 1 letter' },
                 })}

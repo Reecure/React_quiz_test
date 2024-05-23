@@ -28,6 +28,13 @@ const App = () => {
     }
   }, []);
 
+  const deleteQuizHandler = (id: string) => {
+    const updatedList = quizListInit?.filter((item) => item.id !== id);
+
+    setQuizListInit(updatedList);
+    localStorage.setItem('reactQuizStorage', JSON.stringify(updatedList));
+  };
+
   if (formIsOpen && quizListInit) {
     return (
       <QuizForm
@@ -54,7 +61,7 @@ const App = () => {
           Add
         </Button>
       </div>
-      {quizListInit && <QuizList quizs={quizListInit} />}
+      {quizListInit && <QuizList quizs={quizListInit} deleteQuiz={deleteQuizHandler} />}
     </Container>
   );
 };

@@ -35,7 +35,7 @@ const Icon: FC<IconProps> = (props) => {
     return (
       <button
         type="button"
-        className={clickable && className}
+        className={`${clickable && className} flex justify-center items-center`}
         // eslint-disable-next-line react/destructuring-assignment
         onClick={props.onClick}
         style={{ height, width }}

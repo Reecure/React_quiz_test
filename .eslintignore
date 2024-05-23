@@ -1,0 +1,7 @@
+# .eslintignore
+
+# Ignore JSON files
+*.json
+
+# Ignore MD files
+*.md

@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 
-import trashbin from '@/assets/delete.svg?react';
-import edit from '@/assets/edit.svg?react';
+import trashbin from '../../../../public/images/delete.svg?react';
+import edit from '../../../../public/images/edit.svg?react';
+
 import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
 import Quiz from '@/components/widgets/Quiz';

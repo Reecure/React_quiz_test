@@ -84,6 +84,7 @@ const QuizForm: FC<Props> = ({
 
     if (hasError) {
       setFormError('Please ensure every question has a correct answer.');
+      setIsLoading(false);
 
       return;
     }

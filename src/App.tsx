@@ -104,17 +104,17 @@ const App = () => {
           </Button>
         </section>
       )}
-      {!isLoading && quizListInit && (
-        <QuizList
-          setIdForEditing={editQuizHandler}
-          quizs={quizListInit}
-          deleteQuiz={deleteQuizHandler}
-          setIsQuizStarted={() => setIsQuizStarted(true)}
-          resetQuiz={() => {
-            setIsQuizStarted(false);
-          }}
-        />
-      )}
+
+      <QuizList
+        isLoading={isLoading}
+        setIdForEditing={editQuizHandler}
+        quizs={quizListInit || ([] as IListQuiz[])}
+        deleteQuiz={deleteQuizHandler}
+        setIsQuizStarted={() => setIsQuizStarted(true)}
+        resetQuiz={() => {
+          setIsQuizStarted(false);
+        }}
+      />
     </Container>
   );
 };

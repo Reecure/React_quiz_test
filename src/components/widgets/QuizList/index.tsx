@@ -4,6 +4,7 @@ import trashbin from '@/assets/icons/delete.svg?react';
 import edit from '@/assets/icons/edit.svg?react';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
+import { Skeleton } from '@/components/ui/Skeleton';
 import Quiz from '@/components/widgets/Quiz';
 import { IListQuiz } from '@/types';
 
@@ -13,6 +14,7 @@ interface Props {
   setIdForEditing: (idx: string) => void;
   setIsQuizStarted: () => void;
   resetQuiz: () => void;
+  isLoading: boolean;
 }
 
 const QuizList: FC<Props> = ({
@@ -21,6 +23,7 @@ const QuizList: FC<Props> = ({
   setIdForEditing,
   setIsQuizStarted,
   resetQuiz,
+  isLoading,
 }) => {
   const [currentQuiz, setCurrentQuiz] = useState<null | number>(null);
 
@@ -28,6 +31,21 @@ const QuizList: FC<Props> = ({
     setIsQuizStarted();
     setCurrentQuiz(idx);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center max-w-[750px] gap-3 w-full">
+          {Array(3)
+            .fill(null)
+            .map((_, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Skeleton key={i} width="100%" height="50px" border="8" />
+            ))}
+        </div>
+      </div>
+    );
+  }
 
   if (currentQuiz !== null) {
     return (

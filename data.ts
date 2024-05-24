@@ -8,6 +8,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q1',
         title: 'What is the largest mammal?',
+        points: '2',
         answers: [
           { id: '1', answer: 'Elephant', isCorrect: false },
           { id: '2', answer: 'Blue Whale', isCorrect: true },
@@ -18,6 +19,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q2',
         title: 'Which animal is known as the King of the Jungle?',
+        points: '2',
         answers: [
           { id: '1', answer: 'Tiger', isCorrect: false },
           { id: '2', answer: 'Lion', isCorrect: true },
@@ -28,6 +30,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q3',
         title: 'What is the fastest land animal?',
+        points: '2',
         answers: [
           { id: '1', answer: 'Cheetah', isCorrect: true },
           { id: '2', answer: 'Leopard', isCorrect: false },
@@ -38,6 +41,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q4',
         title: 'Which animal is known for its ability to change color?',
+        points: '2',
         answers: [
           { id: '1', answer: 'Octopus', isCorrect: false },
           { id: '2', answer: 'Chameleon', isCorrect: true },
@@ -49,6 +53,7 @@ export const quizList: IListQuiz[] = [
         id: 'q5',
         title:
           'Which bird is known for its impressive memory and problem-solving skills?',
+        points: '2',
         answers: [
           { id: '1', answer: 'Crow', isCorrect: true },
           { id: '2', answer: 'Parrot', isCorrect: false },
@@ -65,6 +70,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q1',
         title: 'What is the tallest type of tree in the world?',
+        points: '1',
         answers: [
           { id: '1', answer: 'Oak', isCorrect: false },
           { id: '2', answer: 'Sequoia', isCorrect: true },
@@ -75,6 +81,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q2',
         title: 'What is the largest rainforest in the world?',
+        points: '1',
         answers: [
           { id: '1', answer: 'Congo Rainforest', isCorrect: false },
           { id: '2', answer: 'Amazon Rainforest', isCorrect: true },
@@ -85,6 +92,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q3',
         title: 'Which is the longest river in the world?',
+        points: '1',
         answers: [
           { id: '1', answer: 'Nile', isCorrect: true },
           { id: '2', answer: 'Amazon', isCorrect: false },
@@ -96,6 +104,7 @@ export const quizList: IListQuiz[] = [
         id: 'q4',
         title:
           'Which natural phenomenon is responsible for the beautiful colors in the sky at dawn and dusk?',
+        points: '1',
         answers: [
           { id: '1', answer: 'Rainbows', isCorrect: false },
           { id: '2', answer: 'Northern Lights', isCorrect: false },
@@ -106,6 +115,7 @@ export const quizList: IListQuiz[] = [
       {
         id: 'q5',
         title: 'What is the main gas found in the air we breathe?',
+        points: '1',
         answers: [
           { id: '1', answer: 'Oxygen', isCorrect: false },
           { id: '2', answer: 'Carbon Dioxide', isCorrect: false },

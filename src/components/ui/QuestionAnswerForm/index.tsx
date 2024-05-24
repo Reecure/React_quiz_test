@@ -25,7 +25,7 @@ const QuestionAnswerForm: FC<Props> = ({ index }) => {
   });
 
   const appendIncorrectAnswer = () => {
-    appendAnswer({ id: crypto.randomUUID(), answer: '', isCorrect: false });
+    appendAnswer({ id: crypto.randomUUID(), answer: '', points: '1', isCorrect: false });
   };
 
   const selectedCorrectAnswer = watch(`quizList.${index}.answers`).findIndex(
@@ -46,8 +46,23 @@ const QuestionAnswerForm: FC<Props> = ({ index }) => {
           Question
           <Input
             variant="primary"
-            className="bg-gray-600 px-2 py-2 outline-none rounded-md w-full"
             {...register(`quizList.${index}.title`, {
+              required: { value: true, message: 'Question is required' },
+              minLength: { value: 1, message: 'Min length is 1 letter' },
+            })}
+          />
+        </label>
+        <label
+          htmlFor={`quizList.${index}.points`}
+          className="flex items-center gap-3 mt-5"
+        >
+          Points
+          <Input
+            variant="primary"
+            type="number"
+            min={1}
+            className="max-w-[100px]"
+            {...register(`quizList.${index}.points`, {
               required: { value: true, message: 'Question is required' },
               minLength: { value: 1, message: 'Min length is 1 letter' },
             })}

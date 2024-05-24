@@ -49,7 +49,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
         (answer) => answer.id === selectedAnswer && answer.isCorrect,
       )
     ) {
-      setScore(score + 1);
+      setScore(score + Number(quiz.questions[currentQuestion]?.points));
     }
 
     setSelectedAnswer(null);
@@ -74,9 +74,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
       <Container className="flex justify-center items-center min-h-screen">
         <div className="flex flex-col items-center gap-5 max-w-[750px] w-full text-center">
           <h1 className="text-5xl font-semibold">Your Score</h1>
-          <p className="text-3xl">
-            {score} out of {quiz.questions.length}
-          </p>
+          <p className="text-3xl">{score}</p>
           <p>Your time is {formatTime(currentTime)}</p>
           <Button variant="green" onClick={resetQuiz}>
             Reset

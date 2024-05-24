@@ -7,6 +7,7 @@ export interface Answer {
 export interface IQuiz {
   id: string;
   title: string;
+  points: string;
   answers: Answer[];
 }
 

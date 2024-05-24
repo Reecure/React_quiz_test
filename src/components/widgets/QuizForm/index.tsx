@@ -51,6 +51,7 @@ const QuizForm: FC<Props> = ({
     append({
       id: crypto.randomUUID(),
       title: '',
+      points: '1',
       answers: [{ id: crypto.randomUUID(), answer: '', isCorrect: false }],
     });
   };

@@ -16,3 +16,11 @@ export interface IListQuiz {
   title: string;
   questions: IQuiz[];
 }
+
+export interface IUserQuizAnswer {
+  id: string;
+  title: string;
+  answer: string;
+  isCorrect: boolean;
+  points: string;
+}

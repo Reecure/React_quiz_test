@@ -1,24 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 
+import chevron from '@/assets/icons/chevron.svg?react';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import Icon from '@/components/ui/Icon';
 import Radio from '@/components/ui/Radio';
 import UserAnswer from '@/components/ui/UserAnswer';
+import { formatTime } from '@/helpers';
 import { IListQuiz, IUserQuizAnswer } from '@/types';
 
 interface Props {
   quiz: IListQuiz;
   closeQuiz: () => void;
 }
-
-const formatTime = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-
-  return `${formattedMinutes}:${formattedSeconds}`;
-};
 
 const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -99,11 +93,11 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
               Reset
             </Button>
           </div>
-          <div className="flex flex-col gap-5">
+          <ul className="flex flex-col gap-5">
             {userAnswers.map((answer) => (
               <UserAnswer key={answer.id} userAnswer={answer} />
             ))}
-          </div>
+          </ul>
         </div>
       </Container>
     );
@@ -111,7 +105,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
 
   return (
     <Container className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col gap-5 w-[450px] sm:w-[550px]">
+      <div className="flex flex-col gap-5 w-[320px] sm:w-[550px]">
         <h1 className="text-5xl font-semibold">{quiz.title}</h1>
         <div>
           <h2 className="text-2xl">
@@ -143,8 +137,15 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
             disabled={selectedAnswer === null}
             onClick={handleNextQuestion}
             variant="green"
+            className="flex justify-center items-center"
           >
             Next
+            <Icon
+              width={18}
+              height={18}
+              Svg={chevron}
+              className="rotate-90 relative top-[1px]"
+            />
           </Button>
 
           <p>{formatTime(currentTime)}</p>

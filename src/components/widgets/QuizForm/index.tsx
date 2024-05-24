@@ -3,12 +3,14 @@ import { FC, useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
 import { FormData } from '@/App';
+import chevron from '@/assets/icons/chevron.svg?react';
 import close from '@/assets/icons/close.svg?react';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import Icon from '@/components/ui/Icon';
 import Input from '@/components/ui/Input';
 import QuestionAnswerForm from '@/components/ui/QuestionAnswerForm';
+import { throttle } from '@/helpers';
 import { IListQuiz } from '@/types';
 
 interface Props {
@@ -17,14 +19,6 @@ interface Props {
   closeForm: () => void;
   updateStorage: (list: IListQuiz[]) => void;
 }
-
-const throttleSubmission = () => {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-};
 
 const QuizForm: FC<Props> = ({
   initedListQuiz,
@@ -37,7 +31,17 @@ const QuizForm: FC<Props> = ({
   const methods = useForm<FormData>({
     defaultValues: initialValues
       ? { title: initialValues.title, quizList: initialValues.questions }
-      : { quizList: [], title: '' },
+      : {
+          quizList: [
+            {
+              id: crypto.randomUUID(),
+              title: '',
+              points: '1',
+              answers: [{ id: crypto.randomUUID(), answer: '', isCorrect: false }],
+            },
+          ],
+          title: '',
+        },
   });
 
   const { handleSubmit, register, setError } = methods;
@@ -71,6 +75,13 @@ const QuizForm: FC<Props> = ({
     setIsLoading(true);
     let hasError = false;
 
+    if (data.quizList.length === 0) {
+      setFormError('The quiz must have at least one question.');
+      setIsLoading(false);
+
+      return;
+    }
+
     data.quizList.forEach((question, index) => {
       const hasCorrectAnswer = question.answers.some((answer) => answer.isCorrect);
 
@@ -90,7 +101,7 @@ const QuizForm: FC<Props> = ({
       return;
     }
 
-    await throttleSubmission();
+    await throttle();
 
     let updatedQuizList: IListQuiz[];
 
@@ -118,7 +129,17 @@ const QuizForm: FC<Props> = ({
 
   return (
     <Container className="flex flex-col items-center max-w-[750px]">
-      <Button variant="green" onClick={() => closeForm()} className="self-start my-5">
+      <Button
+        variant="green"
+        onClick={() => closeForm()}
+        className="self-start my-5 flex justify-center items-center"
+      >
+        <Icon
+          width={18}
+          height={18}
+          Svg={chevron}
+          className="-rotate-90 relative top-[1px]"
+        />
         Back
       </Button>
       <FormProvider {...methods}>

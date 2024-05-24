@@ -59,11 +59,15 @@ const QuizList: FC<Props> = ({
     );
   }
 
+  if (quizs.length === 0) {
+    return <h2 className="text-2xl mx-auto mt-5">There is no quiz&apos;s yet</h2>;
+  }
+
   return (
     <section className="flex flex-col items-center gap-10 w-full">
-      <div className="flex flex-col items-center max-w-[750px] gap-3 w-full">
+      <ul className="flex flex-col items-center max-w-[750px] gap-3 w-full">
         {quizs?.map((quiz, i) => (
-          <div
+          <li
             key={quiz.id}
             className="flex justify-between items-center px-2 py-4 bg-gray-700 group rounded-md w-full"
           >
@@ -84,9 +88,9 @@ const QuizList: FC<Props> = ({
                 />
               </Button>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 };

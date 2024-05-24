@@ -2,24 +2,16 @@ import { useEffect, useState } from 'react';
 
 import { quizList } from '../data';
 
-import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
-import Input from '@/components/ui/Input';
+import Header from '@/components/widgets/Header';
 import QuizForm from '@/components/widgets/QuizForm';
 import QuizList from '@/components/widgets/QuizList';
+import { throttle } from '@/helpers';
 import { IListQuiz, IQuiz } from '@/types';
 
 export type FormData = {
   title: string;
   quizList: IQuiz[];
-};
-
-const throttleDelete = () => {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
 };
 
 const App = () => {
@@ -65,7 +57,7 @@ const App = () => {
     const updatedList = quizListInit?.filter((item) => item.id !== id);
 
     if (updatedList) {
-      await throttleDelete();
+      await throttle();
       setQuizListInit(updatedList);
       localStorage.setItem('reactQuizStorage', JSON.stringify(updatedList));
     }
@@ -77,58 +69,43 @@ const App = () => {
 
   if (formIsOpen && quizListInit) {
     return (
-      <QuizForm
-        initedListQuiz={quizListInit}
-        closeForm={() => setIsFormOpen(false)}
-        initialValues={quizForEditing !== null ? quizForEditing : null}
-        updateStorage={(quizList: IListQuiz[]) => setQuizListInit(quizList)}
-      />
+      <main className="w-full">
+        <QuizForm
+          initedListQuiz={quizListInit}
+          closeForm={() => setIsFormOpen(false)}
+          initialValues={quizForEditing !== null ? quizForEditing : null}
+          updateStorage={(quizList: IListQuiz[]) => setQuizListInit(quizList)}
+        />
+      </main>
     );
   }
 
   return (
     <Container className="flex flex-col items-start w-full min-h-screen py-10">
       {!isQuizStarted && (
-        <header className="flex justify-between w-full items-center gap-5 mb-10">
-          {!formIsOpen && (
-            <p className="text-4xl font-semibold">
-              Quiz&apos;s{' '}
-              <span className="p-1 px-3 bg-gray-700 rounded-md text-lg">
-                {filteredQuizList?.length || 0}
-              </span>{' '}
-            </p>
-          )}
-
-          <Input
-            value={searchedQuizTitle}
-            name="searchQuiz"
-            variant="primary"
-            onChange={(e) => setSearchedQuizTitle(e.currentTarget.value)}
-            className="max-w-[450px] h-10"
-          />
-
-          <Button
-            variant="green"
-            onClick={() => {
-              setIsFormOpen(true);
-              setQuizForEditing(null);
-            }}
-          >
-            Add
-          </Button>
-        </header>
+        <Header
+          quizListLength={filteredQuizList?.length || 0}
+          formIsOpen={formIsOpen}
+          searchQuizTitle={searchedQuizTitle}
+          setSearchedQuizTitle={(e) => setSearchedQuizTitle(e.currentTarget.value)}
+          setOpenForm={() => {
+            setIsFormOpen(true);
+            setQuizForEditing(null);
+          }}
+        />
       )}
-
-      <QuizList
-        isLoading={isLoading}
-        setIdForEditing={editQuizHandler}
-        quizs={filteredQuizList || ([] as IListQuiz[])}
-        deleteQuiz={deleteQuizHandler}
-        setIsQuizStarted={() => setIsQuizStarted(true)}
-        resetQuiz={() => {
-          setIsQuizStarted(false);
-        }}
-      />
+      <main className="w-full">
+        <QuizList
+          isLoading={isLoading}
+          setIdForEditing={editQuizHandler}
+          quizs={filteredQuizList || ([] as IListQuiz[])}
+          deleteQuiz={deleteQuizHandler}
+          setIsQuizStarted={() => setIsQuizStarted(true)}
+          resetQuiz={() => {
+            setIsQuizStarted(false);
+          }}
+        />
+      </main>
     </Container>
   );
 };

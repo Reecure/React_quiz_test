@@ -24,7 +24,7 @@ const Quiz: FC<Props> = ({ quiz, closeQuiz }) => {
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showScore, setShowScore] = useState(false);
-  const [currentTime, setCurrentTime] = useState(3590);
+  const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
     const timeout = setTimeout(() => setCurrentTime((prev) => prev + 1), 1000);

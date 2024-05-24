@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { quizList } from '../data';
 
@@ -13,21 +13,41 @@ export type FormData = {
   quizList: IQuiz[];
 };
 
+const throttleDelete = () => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+};
+
 const App = () => {
   const [quizListInit, setQuizListInit] = useState<IListQuiz[]>();
   const [quizForEditing, setQuizForEditing] = useState<IListQuiz | null>(null);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [formIsOpen, setIsFormOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useLayoutEffect(() => {
-    const reactQuizStorage = localStorage.getItem('reactQuizStorage');
+  useEffect(() => {
+    const fetchData = () => {
+      return new Promise<IListQuiz[]>((resolve) => {
+        const reactQuizStorage = localStorage.getItem('reactQuizStorage');
 
-    if (reactQuizStorage === null) {
-      localStorage.setItem('reactQuizStorage', JSON.stringify(quizList));
-      setQuizListInit(quizList);
-    } else {
-      setQuizListInit(JSON.parse(reactQuizStorage));
-    }
+        setTimeout(() => {
+          if (reactQuizStorage === null) {
+            localStorage.setItem('reactQuizStorage', JSON.stringify(quizList));
+            resolve(quizList);
+          } else {
+            resolve(JSON.parse(reactQuizStorage));
+          }
+        }, 1000); // Simulating a 2-second delay
+      });
+    };
+
+    fetchData().then((data) => {
+      setQuizListInit(data);
+      setIsLoading(false);
+    });
   }, []);
 
   const editQuizHandler = (idx: string) => {
@@ -39,10 +59,11 @@ const App = () => {
     }
   };
 
-  const deleteQuizHandler = (id: string) => {
+  const deleteQuizHandler = async (id: string) => {
     const updatedList = quizListInit?.filter((item) => item.id !== id);
 
     if (updatedList) {
+      await throttleDelete();
       setQuizListInit(updatedList);
       localStorage.setItem('reactQuizStorage', JSON.stringify(updatedList));
     }
@@ -83,7 +104,7 @@ const App = () => {
           </Button>
         </section>
       )}
-      {quizListInit && (
+      {!isLoading && quizListInit && (
         <QuizList
           setIdForEditing={editQuizHandler}
           quizs={quizListInit}

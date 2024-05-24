@@ -18,6 +18,14 @@ interface Props {
   updateStorage: (list: IListQuiz[]) => void;
 }
 
+const throttleSubmission = () => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+};
+
 const QuizForm: FC<Props> = ({
   initedListQuiz,
   closeForm,
@@ -25,7 +33,7 @@ const QuizForm: FC<Props> = ({
   initialValues,
 }) => {
   const [formError, setFormError] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<FormData>({
     defaultValues: initialValues
       ? { title: initialValues.title, quizList: initialValues.questions }
@@ -58,7 +66,8 @@ const QuizForm: FC<Props> = ({
     </Button>
   );
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     let hasError = false;
 
     data.quizList.forEach((question, index) => {
@@ -78,6 +87,8 @@ const QuizForm: FC<Props> = ({
 
       return;
     }
+
+    await throttleSubmission();
 
     let updatedQuizList: IListQuiz[];
 
@@ -99,7 +110,7 @@ const QuizForm: FC<Props> = ({
 
     localStorage.setItem('reactQuizStorage', JSON.stringify(updatedQuizList));
     updateStorage(updatedQuizList);
-
+    setIsLoading(false);
     closeForm();
   };
 
@@ -141,9 +152,10 @@ const QuizForm: FC<Props> = ({
             </Button>
             <div className="flex justify-end w-full">
               <input
+                disabled={isLoading}
                 value="Send"
                 type="submit"
-                className="rounded-md bg-green-700 w-full h-10 hover:bg-green-600 duration-100 cursor-pointer"
+                className="rounded-md bg-green-700 w-full h-10 hover:bg-green-600 duration-100 cursor-pointer disabled:bg-gray-500"
               />
             </div>
           </div>

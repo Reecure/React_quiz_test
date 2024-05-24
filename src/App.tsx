@@ -4,6 +4,7 @@ import { quizList } from '../data';
 
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import Input from '@/components/ui/Input';
 import QuizForm from '@/components/widgets/QuizForm';
 import QuizList from '@/components/widgets/QuizList';
 import { IListQuiz, IQuiz } from '@/types';
@@ -25,6 +26,7 @@ const App = () => {
   const [quizListInit, setQuizListInit] = useState<IListQuiz[]>();
   const [quizForEditing, setQuizForEditing] = useState<IListQuiz | null>(null);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [searchedQuizTitle, setSearchedQuizTitle] = useState('');
   const [formIsOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -69,6 +71,10 @@ const App = () => {
     }
   };
 
+  const filteredQuizList = quizListInit?.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchedQuizTitle.toLowerCase()),
+  );
+
   if (formIsOpen && quizListInit) {
     return (
       <QuizForm
@@ -83,15 +89,23 @@ const App = () => {
   return (
     <Container className="flex flex-col items-start w-full min-h-screen py-10">
       {!isQuizStarted && (
-        <section className="flex justify-between w-full items-center gap-5 mb-10">
+        <header className="flex justify-between w-full items-center gap-5 mb-10">
           {!formIsOpen && (
             <p className="text-4xl font-semibold">
               Quiz&apos;s{' '}
               <span className="p-1 px-3 bg-gray-700 rounded-md text-lg">
-                {quizListInit?.length || 0}
+                {filteredQuizList?.length || 0}
               </span>{' '}
             </p>
           )}
+
+          <Input
+            value={searchedQuizTitle}
+            name="searchQuiz"
+            variant="primary"
+            onChange={(e) => setSearchedQuizTitle(e.currentTarget.value)}
+            className="max-w-[450px] h-10"
+          />
 
           <Button
             variant="green"
@@ -102,13 +116,13 @@ const App = () => {
           >
             Add
           </Button>
-        </section>
+        </header>
       )}
 
       <QuizList
         isLoading={isLoading}
         setIdForEditing={editQuizHandler}
-        quizs={quizListInit || ([] as IListQuiz[])}
+        quizs={filteredQuizList || ([] as IListQuiz[])}
         deleteQuiz={deleteQuizHandler}
         setIsQuizStarted={() => setIsQuizStarted(true)}
         resetQuiz={() => {

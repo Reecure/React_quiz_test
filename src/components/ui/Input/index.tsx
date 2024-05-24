@@ -2,7 +2,7 @@ import { ChangeEvent, forwardRef, InputHTMLAttributes } from 'react';
 
 type HTMLInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'name' | 'onChange' | 'type' | 'value' | 'className'
+  'name' | 'onChange' | 'className'
 >;
 
 type VariantTypes = 'clear' | 'primary';

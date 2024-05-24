@@ -2,9 +2,8 @@ import { FC, useState } from 'react';
 
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
-import close from '../../../../public/images/close.svg?react';
-
 import { FormData } from '@/App';
+import close from '@/assets/icons/close.svg?react';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import Icon from '@/components/ui/Icon';
